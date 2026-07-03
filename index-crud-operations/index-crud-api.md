@@ -215,3 +215,8 @@ POST /books/_update/3
   }
 }
 ```
+
+### Delete
+```
+DELETE /books/_doc/3
+```
