@@ -2,6 +2,7 @@ package com.nj.learning.elasticsearch.springboot.app.playground.sec01;
 
 import com.nj.learning.elasticsearch.springboot.app.playground.AbstractTest;
 import com.nj.learning.elasticsearch.springboot.app.playground.sec01.entity.Customer;
+import com.nj.learning.elasticsearch.springboot.app.playground.sec01.entity.Movie;
 import com.nj.learning.elasticsearch.springboot.app.playground.sec01.entity.Review;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,13 @@ public class IndexOperationsTest extends AbstractTest {
         var indexOperations = this.elasticsearchOperations.indexOps(Customer.class);
         Assertions.assertTrue(indexOperations.create());
         this.verify(indexOperations, 3, 0);
+    }
+
+    @Test
+    public void createIndexWithMapping() {
+        var indexOperations = this.elasticsearchOperations.indexOps(Movie.class);
+        Assertions.assertTrue(indexOperations.create());
+        this.verify(indexOperations, 1, 1);
     }
 
     private void verify(IndexOperations indexOperations, int expectedShards, int expectedReplicas){
