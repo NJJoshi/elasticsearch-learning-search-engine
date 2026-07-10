@@ -21,28 +21,28 @@ public class IndexOperationsTest extends AbstractTest {
     @Test
     public void createIndex() {
         var indexOperations = this.elasticsearchOperations.indexOps(IndexCoordinates.of("albums"));
-        Assertions.assertTrue(indexOperations.create());
+        Assertions.assertTrue(indexOperations.createWithMapping());
         this.verify(indexOperations, 1, 1);
     }
 
     @Test
     public void createIndexWithSettings() {
         var indexOperations = this.elasticsearchOperations.indexOps(Review.class);
-        Assertions.assertTrue(indexOperations.create());
+        Assertions.assertTrue(indexOperations.createWithMapping());
         this.verify(indexOperations, 2, 2);
     }
 
     @Test
     public void createIndexWithSettingsAndMapping() {
         var indexOperations = this.elasticsearchOperations.indexOps(Customer.class);
-        Assertions.assertTrue(indexOperations.create());
+        Assertions.assertTrue(indexOperations.createWithMapping());
         this.verify(indexOperations, 3, 0);
     }
 
     @Test
-    public void createIndexWithMapping() {
+    public void createIndexWithFieldMapping() {
         var indexOperations = this.elasticsearchOperations.indexOps(Movie.class);
-        Assertions.assertTrue(indexOperations.create());
+        Assertions.assertTrue(indexOperations.createWithMapping());
         this.verify(indexOperations, 1, 1);
     }
 
