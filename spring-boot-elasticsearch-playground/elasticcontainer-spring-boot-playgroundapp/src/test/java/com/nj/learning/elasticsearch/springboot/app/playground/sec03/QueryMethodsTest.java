@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.util.Streamable;
 import tools.jackson.core.type.TypeReference;
 
 import java.util.List;
@@ -39,5 +42,50 @@ public class QueryMethodsTest extends AbstractTest {
         var searchHits = this.productRepository.findByCategoryIn(List.of("Furniture", "Beauty"));
         searchHits.forEach(this.print());
         Assertions.assertEquals(8, searchHits.getTotalHits());
+    }
+
+    @Test
+    public void findByCategoryAndBrand() {
+        var searchHits = this.productRepository.findByCategoryAndBrand("Furniture", "Ikea");
+        searchHits.forEach(this.print());
+        Assertions.assertEquals(2,  searchHits.getTotalHits());
+    }
+
+    @Test
+    public void findByName() {
+        var searchHits = this.productRepository.findByName("coffee table");
+        searchHits.forEach(this.print());
+        Assertions.assertEquals(1, searchHits.getTotalHits());
+    }
+
+    @Test
+    public void findByPriceLessThen() {
+        var searchHits = this.productRepository.findByPriceLessThan(80);
+        searchHits.forEach(this.print());
+        Assertions.assertEquals(5, searchHits.getTotalHits());
+    }
+
+    @Test // sort demo
+    public void findByPriceBetween(){
+        var searchHits = this.productRepository.findByPriceBetween(10, 120, Sort.by("price"));
+        searchHits.forEach(this.print());
+        Assertions.assertEquals(8, searchHits.getTotalHits());
+    }
+
+    @Test
+    public void findAllSortByQuantity(){
+        var iterable = this.productRepository.findAll(Sort.by("quantity").descending());
+        iterable.forEach(this.print());
+        Assertions.assertEquals(20, Streamable.of(iterable).toList().size());
+    }
+
+    @Test
+    public void findByCategoryWithPagination(){
+        // page number starts from 0
+        var searchPage = this.productRepository.findByCategory("Electronics", PageRequest.of(1, 4));
+        searchPage.getSearchHits().forEach(this.print());
+        Assertions.assertEquals(1, searchPage.getNumber());
+        Assertions.assertEquals(3, searchPage.getTotalPages());
+        Assertions.assertEquals(12, searchPage.getTotalElements());
     }
 }
