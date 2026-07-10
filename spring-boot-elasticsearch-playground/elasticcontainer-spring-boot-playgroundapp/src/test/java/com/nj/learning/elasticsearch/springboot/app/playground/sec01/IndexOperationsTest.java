@@ -1,6 +1,7 @@
 package com.nj.learning.elasticsearch.springboot.app.playground.sec01;
 
 import com.nj.learning.elasticsearch.springboot.app.playground.AbstractTest;
+import com.nj.learning.elasticsearch.springboot.app.playground.sec01.entity.Review;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -20,6 +21,13 @@ public class IndexOperationsTest extends AbstractTest {
         var indexOperations = this.elasticsearchOperations.indexOps(IndexCoordinates.of("albums"));
         Assertions.assertTrue(indexOperations.create());
         this.verify(indexOperations, 1, 1);
+    }
+
+    @Test
+    public void createIndexWithSettings() {
+        var indexOperations = this.elasticsearchOperations.indexOps(Review.class);
+        Assertions.assertTrue(indexOperations.create());
+        this.verify(indexOperations, 2, 2);
     }
 
     private void verify(IndexOperations indexOperations, int expectedShards, int expectedReplicas){
