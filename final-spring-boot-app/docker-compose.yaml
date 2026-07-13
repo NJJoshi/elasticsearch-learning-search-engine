@@ -19,3 +19,5 @@ services:
       - data-setup
     environment:
     - ELASTICSEARCH_HOST=http://elastic:9200
+    volumes:
+    - ./suggestion-index-settings.json:/usr/share/app/business-search/suggestion-index-settings.json
